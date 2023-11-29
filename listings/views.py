@@ -6,16 +6,19 @@ from .forms import ListingForm
 def index(request):
     return render(request, 'listings/index.html')
 
+
 def greetings(request):
     return render(request,"listings/greetings.html")
+
 
 def all_listings(request):
     all_listings = Listing.objects.order_by('-list_date')
     context = {'all_listings': all_listings}
     return render(request, 'listings/all_listings.html',context)
 
+
 def new_listing(request):
-    if request.method !="POST":
+    if request.method != "POST":
         form = ListingForm()
     else:
         form = ListingForm(request.POST, request.FILES)
@@ -24,4 +27,9 @@ def new_listing(request):
             form.save()
             return redirect('listings:all_listings')
     context = {'form': form}
-    return render(request,'listings/new_listing.html',context)
+    return render(request,'listings/new_listings.html', context)
+
+def details(request, detail_id):
+    detail = Listing.objects.get(id=detail_id)
+    context = {'detail': detail}
+    return render(request,'listings/detail.html', context)
